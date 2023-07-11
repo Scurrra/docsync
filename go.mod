@@ -3,6 +3,7 @@ module github.com/Scurrra/docsync
 go 1.20
 
 require (
+	github.com/eminarican/safetypes v0.0.8 // indirect
 	github.com/emvi/iso-639-1 v1.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/cobra v1.7.0 // indirect

@@ -17,7 +17,7 @@ const (
 type MarkdownConfig struct{}
 
 // Create new `MarkdownConfig`
-func newMarkdownConfig() MarkdownConfig {
+func NewMarkdownConfig() MarkdownConfig {
 	return MarkdownConfig{}
 }
 
@@ -31,7 +31,7 @@ type FormatConfig struct {
 }
 
 // Create new `FormatConfig`
-func newFormatConfig(md MarkdownConfig) FormatConfig {
+func NewFormatConfig(md MarkdownConfig) FormatConfig {
 	return FormatConfig{
 		MainDocType: MD,
 		Markdown:    md,
@@ -54,7 +54,7 @@ type Config struct {
 }
 
 // Create new docsync `Config` and write it to the file
-func newConfig(base string, plangs []string, format *FormatConfig, create_template bool) error {
+func NewConfig(base string, plangs []string, format *FormatConfig, create_template bool) error {
 	// validate primary documentation language code, according to the ISO639-1
 	if !iso6391.ValidCode(base) {
 		return nil
@@ -82,14 +82,14 @@ func newConfig(base string, plangs []string, format *FormatConfig, create_templa
 
 	// make template for the base language
 	if create_template {
-		return createEmptyTemplate(base, plangs, config.Format.MainDocType)
+		return CreateEmptyTemplate(base, plangs, config.Format.MainDocType)
 	}
 
 	return nil
 }
 
 // Add new documentation language
-func addLanguage(lang string, create_template bool) error {
+func AddLanguage(lang string, create_template bool) error {
 	// validate language code
 	if !iso6391.ValidCode(lang) {
 		return nil
@@ -122,9 +122,9 @@ func addLanguage(lang string, create_template bool) error {
 		return err_file
 	}
 
-	// make template for the base language
+	// make template for the new language
 	if create_template {
-		return createTemplateFromBase(lang)
+		return CreateEmptyTemplate(lang, config.PLangs, config.Format.MainDocType)
 	}
 
 	return nil

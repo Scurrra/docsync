@@ -66,7 +66,7 @@ func RenderComments(b bytes.Buffer, comments []Comment) {
 }
 
 // Function that renders single documentation block
-func RenderDocumentBlock(doc_block DocumentationBlock) string {
+func RenderDocumentationBlock(doc_block DocumentationBlock) string {
 	var b bytes.Buffer
 
 	RenderCodeBlock(b, doc_block.Code)
@@ -76,4 +76,18 @@ func RenderDocumentBlock(doc_block DocumentationBlock) string {
 	RenderComments(b, doc_block.Comments)
 
 	return b.String()
+}
+
+func RenderDocument(doc Document) string {
+	content := doc.Content
+	for doc_key, doc_block := range doc.Blocks {
+		strings.Replace(
+			content,
+			doc_key,
+			RenderDocumentationBlock(doc_block),
+			1,
+		)
+	}
+
+	return content
 }

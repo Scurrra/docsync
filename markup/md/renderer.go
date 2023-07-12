@@ -69,6 +69,8 @@ func RenderComments(b bytes.Buffer, comments []Comment) {
 func RenderDocumentationBlock(doc_block DocumentationBlock) string {
 	var b bytes.Buffer
 
+	b.Write([]byte(fmt.Sprintf("> <!--%x-->\n", doc_block.HashKey)))
+
 	RenderCodeBlock(b, doc_block.Code)
 	RenderDescription(b, doc_block.Description)
 	RenderArguments(b, doc_block.Arguments)

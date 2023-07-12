@@ -3,6 +3,7 @@
 package markup
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"regexp"
 	"strings"
@@ -61,6 +62,7 @@ type Comment struct {
 //
 // 5. Other `Comment`s
 type DocumentationBlock struct {
+	HashKey     [32]byte
 	Code        CodeBlock
 	Description Option[string]
 	Arguments   Arguments
@@ -94,6 +96,7 @@ func GenerateEmptyDocumentTemplateIndependent(plangs []string) Document {
 	for _, plang := range plangs {
 		code := CodeBlock{plang, ""}
 		blocks[plang] = DocumentationBlock{
+			sha256.Sum256([]byte(code.Snippet)),
 			code,
 			Some("Description for the code snippet"),
 			args,

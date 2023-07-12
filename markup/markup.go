@@ -68,7 +68,7 @@ type DocumentationBlock struct {
 	Comments    []Comment
 }
 
-var DocumentationBlockKey, _ = regexp.Compile("<\\[\\w+\\]>") // regex is valid, so the error is ignored
+var DocumentationBlockKey, _ = regexp.Compile(`<[\w+]>`) // regex is valid, so the error is ignored
 
 // Single file structure.
 type Document struct {

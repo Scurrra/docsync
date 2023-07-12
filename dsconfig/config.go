@@ -14,13 +14,11 @@ const (
 )
 
 // Configuration settings for markdown documentation
-type MarkdownConfig struct {
-	Separator string `yaml:"separator"`
-}
+type MarkdownConfig struct{}
 
 // Create new `MarkdownConfig`
-func newMarkdownConfig(separator string) MarkdownConfig {
-	return MarkdownConfig{Separator: separator}
+func newMarkdownConfig() MarkdownConfig {
+	return MarkdownConfig{}
 }
 
 // Formatting settings for different markup languages

@@ -54,7 +54,7 @@ type Config struct {
 }
 
 // Create new docsync `Config` and write it to the file
-func NewConfig(base string, plangs []string, format *FormatConfig, create_template bool) error {
+func NewConfig(path, base string, plangs []string, format *FormatConfig, create_template bool) error {
 	// validate primary documentation language code, according to the ISO639-1
 	if !iso6391.ValidCode(base) {
 		return nil
@@ -75,14 +75,14 @@ func NewConfig(base string, plangs []string, format *FormatConfig, create_templa
 	}
 
 	// write config
-	err_file := ioutil.WriteFile("docsync.yaml", data, 0)
+	err_file := ioutil.WriteFile(path+"/docsync.yaml", data, 0)
 	if err_file != nil {
 		return err_file
 	}
 
 	// make template for the base language
 	if create_template {
-		return CreateEmptyTemplate(base, plangs, config.Format.MainDocType)
+		return CreateEmptyTemplate(path, base, plangs, config.Format.MainDocType)
 	}
 
 	return nil
@@ -124,7 +124,7 @@ func AddLanguage(lang string, create_template bool) error {
 
 	// make template for the new language
 	if create_template {
-		return CreateEmptyTemplate(lang, config.PLangs, config.Format.MainDocType)
+		return CreateEmptyTemplate("", lang, config.PLangs, config.Format.MainDocType)
 	}
 
 	return nil

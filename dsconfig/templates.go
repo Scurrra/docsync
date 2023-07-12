@@ -9,8 +9,8 @@ import (
 )
 
 // Create an emty template of type `doctype` for the specified `lang` and `plangs`
-func CreateEmptyTemplate(lang string, plangs []string, doctype DocType) error {
-	err_dir := os.Mkdir(lang, os.ModePerm)
+func CreateEmptyTemplate(path, lang string, plangs []string, doctype DocType) error {
+	err_dir := os.Mkdir(path+lang, os.ModePerm)
 	if err_dir != nil {
 		return err_dir
 	}

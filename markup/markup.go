@@ -11,6 +11,20 @@ import (
 	. "github.com/eminarican/safetypes"
 )
 
+// Feature status
+type FeatureStatus string
+
+const (
+	// New feature
+	New FeatureStatus = "New"
+
+	// Feature is active
+	Active FeatureStatus = "Active"
+
+	// Feature is Deprecated
+	Deprecated FeatureStatus = "Deprecated"
+)
+
 // Code snippet (function definition, struct, class, module, i.e.)
 // to be documented.
 type CodeBlock struct {
@@ -63,6 +77,7 @@ type Comment struct {
 // 5. Other `Comment`s
 type DocumentationBlock struct {
 	HashKey     [32]byte
+	Status      FeatureStatus
 	Code        CodeBlock
 	Description Option[string]
 	Arguments   Arguments
@@ -97,6 +112,7 @@ func GenerateEmptyDocumentTemplateIndependent(plangs []string) Document {
 		code := CodeBlock{plang, ""}
 		blocks[plang] = DocumentationBlock{
 			sha256.Sum256([]byte(code.Snippet)),
+			New,
 			code,
 			Some("Description for the code snippet"),
 			args,

@@ -2,6 +2,8 @@ package dsconfig
 
 import (
 	"io/ioutil"
+	"os"
+	"path"
 
 	iso6391 "github.com/emvi/iso-639-1"
 	"gopkg.in/yaml.v3"
@@ -54,7 +56,7 @@ type Config struct {
 }
 
 // Create new docsync `Config` and write it to the file
-func NewConfig(path, base string, plangs []string, format *FormatConfig, create_template bool) error {
+func NewConfig(dir_path, base string, plangs []string, format FormatConfig, create_template bool) error {
 	// validate primary documentation language code, according to the ISO639-1
 	if !iso6391.ValidCode(base) {
 		return nil
@@ -65,7 +67,7 @@ func NewConfig(path, base string, plangs []string, format *FormatConfig, create_
 		Base:   base,
 		Langs:  []string{base},
 		PLangs: plangs,
-		Format: *format,
+		Format: format,
 	}
 
 	// marshall config to yaml
@@ -75,14 +77,27 @@ func NewConfig(path, base string, plangs []string, format *FormatConfig, create_
 	}
 
 	// write config
-	err_file := ioutil.WriteFile(path+"/docsync.yaml", data, 0)
+	if len(dir_path) != 0 && dir_path != "." {
+		err_dir := os.Mkdir(path.Join(dir_path), os.ModePerm)
+		if err_dir != nil {
+			return err_dir
+		}
+	}
+
+	f, err_file := os.Create(path.Join(dir_path, "docsync.yaml"))
+	if err_file != nil {
+		return err_file
+	}
+	defer f.Close()
+
+	_, err_file = f.Write(data)
 	if err_file != nil {
 		return err_file
 	}
 
 	// make template for the base language
 	if create_template {
-		return CreateEmptyTemplate(path, base, plangs, config.Format.MainDocType)
+		return CreateEmptyTemplate(dir_path, base, plangs, config.Format.MainDocType)
 	}
 
 	return nil

@@ -7,22 +7,22 @@ func GenerateEmptyDocumentTemplateMarkdown(plangs []string) markup.Document {
 	doc := markup.GenerateEmptyDocumentTemplateIndependent(plangs)
 
 	header := `
-	# Documentation
+# Documentation
 
-	This is markdown template. 
+This is markdown template. 
 	
-	## Header
+## Header
 
-	This the header part of the document, where you can write the description of the file content.
+This the header part of the document, where you can write the description of the file content.
 
-	The next part of the file is the group of documentation blocks.
-	`
+The next part of the file is the group of documentation blocks.
+`
 
 	footer := `
-	## Footer
+## Footer
 
-	This is the footer part of the document.
-	`
+This is the footer part of the document.
+`
 
 	doc.Content = header + doc.Content + footer
 

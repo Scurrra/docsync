@@ -11,14 +11,14 @@ import (
 )
 
 // Function that renders single `CodeBlock` to markdown
-func RenderCodeBlock(b bytes.Buffer, code_block CodeBlock) {
+func RenderCodeBlock(b *bytes.Buffer, code_block CodeBlock) {
 	b.WriteString(fmt.Sprintf("> ```%s\n> ", code_block.Lang))
 	b.WriteString(strings.ReplaceAll(code_block.Snippet, "\n", "\n> "))
-	b.WriteString(">\n")
+	b.WriteString("\n> ```\n>\n")
 }
 
 // Function that renders single description to markdown
-func RenderDescription(b bytes.Buffer, description Option[string]) {
+func RenderDescription(b *bytes.Buffer, description Option[string]) {
 	if description.IsSome() {
 		b.WriteString("> ")
 		b.WriteString(strings.ReplaceAll(*description.Value, "\n", "\n> "))
@@ -27,7 +27,7 @@ func RenderDescription(b bytes.Buffer, description Option[string]) {
 }
 
 // Function that renders `Argumanets` to markdown
-func RenderArguments(b bytes.Buffer, args Arguments) {
+func RenderArguments(b *bytes.Buffer, args Arguments) {
 	if len(args.Args) != 0 {
 		b.WriteString("> ***Arguments:***\n")
 		for arg, desc := range args.Args {
@@ -44,9 +44,9 @@ func RenderArguments(b bytes.Buffer, args Arguments) {
 }
 
 // Function that renders `Exaple`s block
-func RenderExamples(b bytes.Buffer, examples []Example) {
+func RenderExamples(b *bytes.Buffer, examples []Example) {
 	if examples != nil || len(examples) != 0 {
-		b.WriteString("> ***Examples:***\n\n")
+		b.WriteString("> ***Examples:***\n>\n")
 		for _, example := range examples {
 			RenderDescription(b, example.Description)
 			RenderCodeBlock(b, example.Code)
@@ -55,10 +55,10 @@ func RenderExamples(b bytes.Buffer, examples []Example) {
 }
 
 // Function that renders `Comment`s block
-func RenderComments(b bytes.Buffer, comments []Comment) {
+func RenderComments(b *bytes.Buffer, comments []Comment) {
 	if comments != nil || len(comments) != 0 {
 		for _, comment := range comments {
-			b.WriteString(fmt.Sprintf("> ***%s:***\n\n", comment.Name))
+			b.WriteString(fmt.Sprintf("> ***%s:***\n>\n", comment.Name))
 			RenderDescription(b, comment.Description)
 			RenderCodeBlock(b, comment.Code)
 		}
@@ -72,11 +72,11 @@ func RenderDocumentationBlock(doc_block DocumentationBlock) string {
 	b.Write([]byte(fmt.Sprintf("> <!--%x-->\n", doc_block.HashKey)))
 	b.Write([]byte(fmt.Sprintf("> <!--%v-->\n", doc_block.Status)))
 
-	RenderCodeBlock(b, doc_block.Code)
-	RenderDescription(b, doc_block.Description)
-	RenderArguments(b, doc_block.Arguments)
-	RenderExamples(b, doc_block.Examples)
-	RenderComments(b, doc_block.Comments)
+	RenderCodeBlock(&b, doc_block.Code)
+	RenderDescription(&b, doc_block.Description)
+	RenderArguments(&b, doc_block.Arguments)
+	RenderExamples(&b, doc_block.Examples)
+	RenderComments(&b, doc_block.Comments)
 
 	return b.String()
 }
@@ -84,7 +84,7 @@ func RenderDocumentationBlock(doc_block DocumentationBlock) string {
 func RenderDocument(doc Document) string {
 	content := doc.Content
 	for doc_key, doc_block := range doc.Blocks {
-		strings.Replace(
+		content = strings.Replace(
 			content,
 			doc_key,
 			RenderDocumentationBlock(doc_block),

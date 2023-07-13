@@ -27,5 +27,11 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.AddCommand(initCmd)
+
+	initCmd.Flags().StringVar(&docsPath, "path", ".", "Path where docs will be placed. '.' means the current directory.")
+	initCmd.Flags().StringVar(&docsMainType, "type", "md", "The main documentation files' type")
+	initCmd.Flags().StringVar(&baseLang, "lang", "en", "The base language of the documentation. Please, specify ISO639-1 code.")
+	initCmd.Flags().StringSliceVar(&programmingLangs, "plangs", []string{}, "Programming languages of code from the documentations")
 
 }

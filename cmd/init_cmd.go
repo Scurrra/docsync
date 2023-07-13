@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	noInteract       bool
 	docsPath         string
 	docsMainType     string
 	baseLang         string
@@ -19,6 +20,16 @@ var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize new documentation",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if noInteract {
+			return dsconfig.NewConfig(
+				docsPath,
+				baseLang,
+				programmingLangs,
+				dsconfig.NewFormatConfig(dsconfig.MarkdownConfig{}),
+				true,
+			)
+		}
+
 		if !cmd.Flags().Lookup("path").Changed {
 			docsPath = promptGetInput(
 				promptContent{

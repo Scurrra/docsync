@@ -98,12 +98,6 @@ type Document struct {
 
 // Function that generates empty documentation file template.
 func GenerateEmptyDocumentTemplateIndependent(plangs []string) Document {
-	// create links in document content
-	for i := 0; i < len(plangs); i++ {
-		plangs[i] = fmt.Sprintf("<[%s]>", plangs[i])
-	}
-	content := strings.Join(plangs, "\n\n")
-
 	args := Arguments{
 		map[string]string{
 			"arg1": "Description for the arg",
@@ -146,6 +140,12 @@ func GenerateEmptyDocumentTemplateIndependent(plangs []string) Document {
 			},
 		}
 	}
+
+	// create links in document content
+	for i := 0; i < len(plangs); i++ {
+		plangs[i] = fmt.Sprintf("<[%s]>", plangs[i])
+	}
+	content := strings.Join(plangs, "\n\n")
 
 	return Document{
 		content,

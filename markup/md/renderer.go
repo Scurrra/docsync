@@ -86,7 +86,7 @@ func RenderDocument(doc Document) string {
 	for doc_key, doc_block := range doc.Blocks {
 		content = strings.Replace(
 			content,
-			doc_key,
+			"<["+doc_key+"]>",
 			RenderDocumentationBlock(doc_block),
 			1,
 		)

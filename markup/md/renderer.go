@@ -28,7 +28,7 @@ func RenderDescription(b *bytes.Buffer, description Option[string]) {
 
 // Function that renders `Argumanets` to markdown
 func RenderArguments(b *bytes.Buffer, args Arguments) {
-	if len(args.Args) != 0 {
+	if args.Args != nil && len(args.Args) != 0 {
 		b.WriteString("> ***Arguments:***\n")
 		for arg, desc := range args.Args {
 			b.WriteString(

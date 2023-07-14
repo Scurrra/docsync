@@ -9,7 +9,6 @@ import (
 )
 
 var (
-	noInteract       bool
 	docsPath         string
 	docsMainType     string
 	baseLang         string

@@ -9,7 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "0.0.1"
+var (
+	version    = "0.0.1"
+	noInteract bool
+)
+
 var rootCmd = &cobra.Command{
 	Use:     "docsync",
 	Version: version,
@@ -28,8 +32,8 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(initCmd)
+	rootCmd.PersistentFlags().BoolVar(&noInteract, "no-interact", false, "Ask for missing flags in interactive mod or not.")
 
-	initCmd.Flags().BoolVar(&noInteract, "no-interact", false, "Ask for missing flags in interactive mod or not.")
 	initCmd.Flags().StringVar(&docsPath, "path", ".", "Path where docs will be placed. '.' means the current directory.")
 	initCmd.Flags().StringVar(&docsMainType, "type", "md", "The main documentation files' type")
 	initCmd.Flags().StringVar(&baseLang, "lang", "en", "The base language of the documentation. Please, specify ISO639-1 code.")

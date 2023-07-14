@@ -22,7 +22,7 @@ func RenderDescription(b *bytes.Buffer, description Option[string]) {
 	if description.IsSome() {
 		b.WriteString("> ")
 		b.WriteString(strings.ReplaceAll(*description.Value, "\n", "\n> "))
-		b.WriteString(">\n")
+		b.WriteString("\n>\n")
 	}
 }
 
@@ -69,6 +69,7 @@ func RenderComments(b *bytes.Buffer, comments []Comment) {
 func RenderDocumentationBlock(doc_block DocumentationBlock) string {
 	var b bytes.Buffer
 
+	b.Write([]byte("> <!--docbegin-->\n"))
 	b.Write([]byte(fmt.Sprintf("> <!--%x-->\n", doc_block.HashKey)))
 	b.Write([]byte(fmt.Sprintf("> <!--%v-->\n", doc_block.Status)))
 
@@ -77,6 +78,8 @@ func RenderDocumentationBlock(doc_block DocumentationBlock) string {
 	RenderArguments(&b, doc_block.Arguments)
 	RenderExamples(&b, doc_block.Examples)
 	RenderComments(&b, doc_block.Comments)
+
+	b.Write([]byte("> <!--docend-->\n"))
 
 	return b.String()
 }

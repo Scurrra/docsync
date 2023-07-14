@@ -1,6 +1,7 @@
 package md
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -214,13 +215,20 @@ func ParseDocument(content string) markup.Document {
 
 	blocks := make(map[string]markup.DocumentationBlock)
 
-	content_splitted := strings.Split(content, "\n\n")
-	for i := 0; i < len(content_splitted); i++ {
-		content_splitted[i] = strings.Trim(content_splitted[i], " \t\n")
+	doc_start := strings.Index(content, "> <!--docbegin-->\n") // len("> <!--docbegin-->\n") == 18
+	doc_end := strings.Index(content, "> <!--docend-->\n")     // len("> <!--docbegin-->\n") == 16
 
-		if content_splitted[i][0:1] == ">" {
-
+	for {
+		if doc_start == -1 {
+			break
 		}
+
+		block := ParseDocumentationBlock(content[(doc_start + 18):doc_end])
+		blocks[string(block.HashKey[:])] = block
+		content = fmt.Sprintf("%s\n <[%x]>\n %s", content[:doc_start], block.HashKey, content[:(doc_end+16)])
+
+		doc_start = strings.Index(content, "> <!--docbegin-->\n") // len("> <!--docbegin-->\n") == 18
+		doc_end = strings.Index(content, "> <!--docend-->\n")     // len("> <!--docbegin-->\n") == 16
 	}
 
 	return markup.Document{

@@ -76,7 +76,7 @@ type Comment struct {
 //
 // 5. Other `Comment`s
 type DocumentationBlock struct {
-	HashKey     [32]byte
+	HashKey     string
 	Status      FeatureStatus
 	Code        CodeBlock
 	Description Option[string]
@@ -85,7 +85,7 @@ type DocumentationBlock struct {
 	Comments    []Comment
 }
 
-var DocumentationBlockKey, _ = regexp.Compile(`<[\w+]>`) // regex is valid, so the error is ignored
+var DocumentationBlockKey = regexp.MustCompile(`<\[\w+\]>`) // regex is valid, so the error is ignored
 
 // Single file structure.
 type Document struct {
@@ -111,7 +111,7 @@ func GenerateEmptyDocumentTemplateIndependent(plangs []string) Document {
 	for _, plang := range plangs {
 		code := CodeBlock{plang, ""}
 		blocks[plang] = DocumentationBlock{
-			sha256.Sum256([]byte(code.Snippet)),
+			fmt.Sprintf("%x", sha256.Sum256([]byte(code.Snippet))),
 			New,
 			code,
 			Some("Description for the code snippet"),
@@ -128,12 +128,12 @@ func GenerateEmptyDocumentTemplateIndependent(plangs []string) Document {
 			},
 			[]Comment{
 				{
-					"<#CommentName1>",
+					"CommentName1",
 					Some("Description for the <#CommentName1>"),
 					code,
 				},
 				{
-					"<#CommentName2>",
+					"CommentName2",
 					Some("Description for the <#CommentName2>"),
 					code,
 				},

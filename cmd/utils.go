@@ -55,7 +55,7 @@ func promptGetInput(pc promptContent) string {
 	return result
 }
 
-func promptGetSelect(pc promptContent, items []string) string {
+func promptGetSelect(pc promptContent, items interface{}) string {
 	index := -1
 	var result string
 	var err error

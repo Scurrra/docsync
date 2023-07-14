@@ -70,7 +70,7 @@ func RenderDocumentationBlock(doc_block DocumentationBlock) string {
 	var b bytes.Buffer
 
 	b.Write([]byte("> <!--docbegin-->\n"))
-	b.Write([]byte(fmt.Sprintf("> <!--%x-->\n", doc_block.HashKey)))
+	b.Write([]byte(fmt.Sprintf("> <!--%s-->\n", doc_block.HashKey)))
 	b.Write([]byte(fmt.Sprintf("> <!--%v-->\n", doc_block.Status)))
 
 	RenderCodeBlock(&b, doc_block.Code)

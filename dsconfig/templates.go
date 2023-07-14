@@ -1,8 +1,11 @@
 package dsconfig
 
 import (
+	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
+	"strings"
 
 	"github.com/Scurrra/docsync/markup/md"
 )
@@ -15,8 +18,8 @@ func CreateEmptyTemplate(dir_path, lang string, plangs []string, doctype DocType
 	}
 
 	switch doctype {
-	case "md":
-		doc := md.GenerateEmptyDocumentTemplateMarkdown(plangs)
+	case ".md":
+		doc := md.GenerateEmptyDocumentTemplate(plangs)
 		doc_file := md.RenderDocument(doc)
 
 		f, err_file := os.Create(path.Join(dir_path, lang, "index.md"))
@@ -34,14 +37,49 @@ func CreateEmptyTemplate(dir_path, lang string, plangs []string, doctype DocType
 	return nil
 }
 
-// Create template for the specified `lang` and `plangs` using <base>/docs.<doctype> as reference
-func CreateTemplateFromBase(lang string) error {
+// Create template for the specified `lang` and `plangs` using <base>/docs<doctype> as reference
+func CreateTemplateFromBase(baseLang, lang string, doctype DocType) error {
 	err_dir := os.Mkdir(lang, os.ModePerm)
 	if err_dir != nil {
 		return err_dir
 	}
 
-	// TODO: template files
+	err := filepath.Walk(baseLang,
+		func(doc_path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
 
-	return nil
+			if filepath.Ext(doc_path) == string(doctype) {
+				doc_f, err_f := ioutil.ReadFile(doc_path)
+				if err_f != nil {
+					return nil
+				}
+
+				buf := strings.Index(doc_path, string(os.PathSeparator)) + 1
+				doc_path = doc_path[buf:]
+
+				switch doctype {
+				case ".md":
+					doc := md.ParseDocument(string(doc_f))
+
+					f, err_f := os.Create(path.Join(lang, doc_path))
+					if err_f != nil {
+						return err_f
+					}
+					defer f.Close()
+
+					doc = md.GenerateDocumentTemplateBase(doc)
+
+					_, err_f = f.Write([]byte(md.RenderDocument(doc)))
+					if err_f != nil {
+						return err_f
+					}
+				}
+			}
+
+			return nil
+		})
+
+	return err
 }

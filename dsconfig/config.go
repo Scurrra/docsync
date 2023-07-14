@@ -12,7 +12,7 @@ import (
 type DocType string
 
 const (
-	MD DocType = "md"
+	MD DocType = ".md"
 )
 
 // Configuration settings for markdown documentation
@@ -104,7 +104,7 @@ func NewConfig(dir_path, base string, plangs []string, format FormatConfig, crea
 }
 
 // Add new documentation language
-func AddLanguage(lang string, create_template bool) error {
+func AddLanguage(lang string, create_template_from_base, create_empty_template bool) error {
 	// validate language code
 	if !iso6391.ValidCode(lang) {
 		return nil
@@ -138,7 +138,9 @@ func AddLanguage(lang string, create_template bool) error {
 	}
 
 	// make template for the new language
-	if create_template {
+	if create_template_from_base {
+		return CreateTemplateFromBase(config.Base, lang, config.Format.MainDocType)
+	} else if create_empty_template {
 		return CreateEmptyTemplate("", lang, config.PLangs, config.Format.MainDocType)
 	}
 

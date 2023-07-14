@@ -32,11 +32,15 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(initCmd)
+	rootCmd.AddCommand(createCmd)
 	rootCmd.PersistentFlags().BoolVar(&noInteract, "no-interact", false, "Ask for missing flags in interactive mod or not.")
 
 	initCmd.Flags().StringVar(&docsPath, "path", ".", "Path where docs will be placed. '.' means the current directory.")
-	initCmd.Flags().StringVar(&docsMainType, "type", "md", "The main documentation files' type")
+	initCmd.Flags().StringVar(&docsMainType, "type", "md", "The main documentation files' type.")
 	initCmd.Flags().StringVar(&baseLang, "lang", "en", "The base language of the documentation. Please, specify ISO639-1 code.")
-	initCmd.Flags().StringSliceVar(&programmingLangs, "plangs", []string{}, "Programming languages of code from the documentations")
+	initCmd.Flags().StringSliceVar(&programmingLangs, "plangs", []string{}, "Programming languages of code from the documentations.")
 
+	createCmd.Flags().StringVarP(&lang, "lang", "l", "", "New documentation language.")
+	createCmd.Flags().BoolVar(&createFromBase, "create-from-base", true, "Create documentation using base as template.")
+	createCmd.Flags().BoolVar(&createEmpty, "create-empty", false, "Create an empty documentation.")
 }

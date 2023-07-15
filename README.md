@@ -119,3 +119,5 @@ This project is licensed under the [MIT license](https://github.com/Scurrra/docs
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in docsync by you, shall be licensed as MIT, without any additional terms or conditions. 
 
 If you have any issues or you find any mistakes or bugs, contact me. 
+
+Installation scripts are adopted from [this](https://github.com/tomakado/install-template) template.

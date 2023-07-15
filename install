@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# This is a template for installation script.
-# Replace Scurrra, docsync, <this-script-url>, <community-url> with your own values.
-
 LATEST=$(curl --silent "https://api.github.com/repos/Scurrra/docsync-cli/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 RELEASE=${1:-$LATEST}
 VERSION="${RELEASE//v}"

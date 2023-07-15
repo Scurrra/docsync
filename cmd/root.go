@@ -34,6 +34,7 @@ func init() {
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(createCmd)
 	rootCmd.AddCommand(updateCmd)
+	rootCmd.AddCommand(syncCmd)
 
 	rootCmd.PersistentFlags().BoolVar(&noInteract, "no-interact", false, "Ask for missing flags in interactive mod or not.")
 
@@ -46,5 +47,7 @@ func init() {
 	createCmd.Flags().BoolVar(&createFromBase, "create-from-base", true, "Create documentation using base as template.")
 	createCmd.Flags().BoolVar(&createEmpty, "create-empty", false, "Create an empty documentation.")
 
-	updateCmd.Flags().BoolVar(&updatStatus, "update-status", false, "Update status of 'New' documentation blocks")
+	updateCmd.Flags().BoolVar(&updatStatus, "update-status", false, "Update status of 'New' documentation blocks.")
+
+	syncCmd.Flags().StringVarP(&lang, "lang", "l", "", "Documentation language for synchronization.")
 }

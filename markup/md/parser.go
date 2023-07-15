@@ -258,14 +258,14 @@ func ParseDocument(content string) markup.Document {
 
 		block := ParseDocumentationBlock(content[(doc_start + 18):doc_end])
 		blocks[string(block.HashKey[:])] = block
-		content = fmt.Sprintf("%s<[%s]>%s", content[:doc_start], block.HashKey, content[(doc_end+16):])
+		content = fmt.Sprintf("\n%s<[%s]>%s\n\n", content[:doc_start], block.HashKey, content[(doc_end+16):])
 
 		doc_start = strings.Index(content, "> <!--docbegin-->\n") // len("> <!--docbegin-->\n") == 18
 		doc_end = strings.Index(content, "> <!--docend-->\n")     // len("> <!--docbegin-->\n") == 16
 	}
 
 	return markup.Document{
-		Content: content,
+		Content: strings.Trim(content, " \t\n"),
 		Blocks:  blocks,
 	}
 }

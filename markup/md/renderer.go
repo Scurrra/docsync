@@ -95,5 +95,5 @@ func RenderDocument(doc Document) string {
 		)
 	}
 
-	return content
+	return strings.Trim(content, " \t\n")
 }

@@ -33,6 +33,8 @@ func Execute() {
 func init() {
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(createCmd)
+	rootCmd.AddCommand(updateCmd)
+
 	rootCmd.PersistentFlags().BoolVar(&noInteract, "no-interact", false, "Ask for missing flags in interactive mod or not.")
 
 	initCmd.Flags().StringVar(&docsPath, "path", ".", "Path where docs will be placed. '.' means the current directory.")

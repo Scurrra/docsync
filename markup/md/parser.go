@@ -1,6 +1,7 @@
 package md
 
 import (
+	"crypto/sha256"
 	"fmt"
 	"regexp"
 	"strings"
@@ -28,7 +29,8 @@ func ParseDocumentationBlock(data string) markup.DocumentationBlock {
 	// hashkey
 	hashKey_start := strings.Index(data, "<!--") + 4
 	hashKey_end := strings.Index(data, "-->")
-	hashKey = data[hashKey_start:hashKey_end]
+	// useless
+	hashKey = strings.Trim(data[hashKey_start:hashKey_end], " \t\n")
 	data_start = strings.Index(data, "\n") + 1
 
 	// status
@@ -48,6 +50,10 @@ func ParseDocumentationBlock(data string) markup.DocumentationBlock {
 		Lang:    lang,
 		Snippet: code,
 	}
+	// anyway
+	// if len(hashKey) == 0 {
+	hashKey = fmt.Sprintf("%x", sha256.Sum256([]byte(code)))
+	// }
 	data = strings.Trim(data[(code_end+4):], " \n")
 
 	// description

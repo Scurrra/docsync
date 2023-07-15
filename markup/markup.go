@@ -3,7 +3,6 @@
 package markup
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"regexp"
 	"strings"
@@ -111,7 +110,7 @@ func GenerateEmptyDocumentTemplateIndependent(plangs []string) Document {
 	for _, plang := range plangs {
 		code := CodeBlock{plang, ""}
 		blocks[plang] = DocumentationBlock{
-			fmt.Sprintf("%x", sha256.Sum256([]byte(code.Snippet))),
+			"", //fmt.Sprintf("%x", sha256.Sum256([]byte(code.Snippet))),
 			New,
 			code,
 			Some("Description for the code snippet"),

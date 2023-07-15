@@ -5,17 +5,37 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/Scurrra/docsync/dsconfig"
+	"github.com/Scurrra/docsync/markup"
 	"github.com/Scurrra/docsync/markup/md"
+	. "github.com/eminarican/safetypes"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
+)
+
+var (
+	updatStatus bool
 )
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update hashkeys of documentation blocks in base documentation. Command should be called from the root documentation directory.",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if !noInteract {
+			if !cmd.Flags().Lookup("update-status").Changed {
+				updatStatus, _ = strconv.ParseBool(promptGetSelect(
+					promptContent{
+						"'update-status' is not provided",
+						"Update status: ",
+						None[string](),
+					},
+					[]bool{true, false},
+				))
+			}
+		}
+
 		// read config from file
 		data, err_file := ioutil.ReadFile("docsync.yaml")
 		if err_file != nil {
@@ -46,6 +66,15 @@ var updateCmd = &cobra.Command{
 					case ".md":
 						// here hashkeys will be recomputed here
 						doc := md.ParseDocument(string(doc_f))
+
+						if updatStatus {
+							for key, block := range doc.Blocks {
+								if block.Status == "New" {
+									block.Status = markup.Active
+								}
+								doc.Blocks[key] = block
+							}
+						}
 
 						// so we need just rewrite
 						err_f = os.WriteFile(doc_path, []byte(md.RenderDocument(doc)), os.ModePerm)

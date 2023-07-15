@@ -34,13 +34,13 @@ func ParseDocumentationBlock(data string) markup.DocumentationBlock {
 	data_start = strings.Index(data, "\n") + 1
 
 	// status
-	status_start := strings.Index(data[data_start:], "<!--") + 4
-	status_end := strings.Index(data[data_start:], "-->")
+	status_start := data_start + strings.Index(data[data_start:], "<!--") + 4
+	status_end := data_start + strings.Index(data[data_start:], "-->")
 	status = markup.FeatureStatus(strings.Trim(data[status_start:status_end], " "))
 	data_start = status_end + 3
 
 	// codeblock
-	lang_start := strings.Index(data[data_start:], "```") + 3
+	lang_start := data_start + strings.Index(data[data_start:], "```") + 3
 	lang_end := lang_start + strings.Index(data[lang_start:], "\n")
 	lang := data[lang_start:lang_end]
 	code_start := lang_end + 1
@@ -217,10 +217,10 @@ func ParseDocumentationBlock(data string) markup.DocumentationBlock {
 
 			// parse snippet
 			code_start := lang_end + 1
-			code_end := code_start + strings.Index(data[code_start:], "```")
+			code_end := code_start + strings.Index(data[code_start:], "\n```")
 			code := data[code_start:code_end]
 
-			data_start = code_end + 3
+			data_start = code_end + 4
 			comments = append(comments, markup.Comment{
 				Name:        name,
 				Description: desc,

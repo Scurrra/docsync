@@ -45,4 +45,6 @@ func init() {
 	createCmd.Flags().StringVarP(&lang, "lang", "l", "", "New documentation language.")
 	createCmd.Flags().BoolVar(&createFromBase, "create-from-base", true, "Create documentation using base as template.")
 	createCmd.Flags().BoolVar(&createEmpty, "create-empty", false, "Create an empty documentation.")
+
+	updateCmd.Flags().BoolVar(&updatStatus, "update-status", false, "Update status of 'New' documentation blocks")
 }

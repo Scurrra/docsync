@@ -11,7 +11,7 @@ builds:
       - linux
       - windows
       - darwin
-
+    ldflags: "-s -w -X github.com/Scurrra/docsync/internal/build.Version={{.Tag}} -X github.com/scurrra/docsync/internal/build.CommitHash={{.FullCommit}}"
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of uname.
